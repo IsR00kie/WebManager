@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="navbar navbar-default" id="navbar">
+    <script type="text/javascript">
+        try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+    </script>
+    <div class="navbar-container" id="navbar-container">
+        <div class="navbar-header pull-left">
+            <a href="/index.php?m=Platform&c=Proxy&a=NAN" class="navbar-brand">
+                <small><i class="icon-leaf"></i> Jackie SEO工作平台</small>
+            </a>
+            <!-- /.brand -->
+        </div>
+        <div class="navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="light-blue">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="{{ url_for('static', filename='images/user.jpg') }}" alt="Jason's Photo" />
+                        <span class="user-info">
+                            <small>欢迎光临,</small>admin</span>
+                            <i class="icon-caret-down"></i>
+                        </a>
+                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/index.php?m=Platform&c=index&a=logout">
+                            <i class="icon-off"></i> 退出系统
+                        </a>
+                    </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- /.ace-nav -->
+        </div>
+    </div>
+</div>
+<div class="main-container" id="main-container">
+    <script type="text/javascript"> try{ace.settings.check('main-container' , 'fixed')}catch(e){} </script>
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#"> <span class="menu-text"></span> </a>
+        <div class="sidebar" id="sidebar">
+            <script type="text/javascript"> try{ace.settings.check('sidebar' , 'fixed')}catch(e){} </script>
+            <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+                <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                    <span class="btn btn-success"></span> <span class="btn btn-info"></span>
+                    <span class="btn btn-warning"></span> <span class="btn btn-danger"></span>
+                </div>
+            </div>
+            <!-- #sidebar-shortcuts -->
+            <ul class="nav nav-list">
+                <li class="b-has-child" id='spider'>
+                    <a href="#" class="dropdown-toggle b-nav-parent">
+                        <i class="fa fa-rocket icon-test"></i>
+                        <span class="menu-text">蜘蛛管理</span> 
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="b-nav-li ">
+                            <a href="{{ url_for('show_spider', show='today', spider='all_spider') }}">
+                                <i class="icon-double-angle-right"></i>今日蜘蛛统计
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="{{ url_for('show_spider', show='yesterday', spider='all_spider') }}">
+                                <i class="icon-double-angle-right"></i>昨日蜘蛛统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="b-has-child">
+                    <a href="#" class="dropdown-toggle b-nav-parent">
+                            <i class="fa fa-refresh icon-test"></i>
+                            <span class="menu-text">劫持管理 </span>
+                            <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="b-nav-li ">
+                            <a href="">
+                                <i class="icon-double-angle-right"></i> 首页劫持
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="">
+                                <i class="icon-double-angle-right"></i>代码劫持
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="">
+                                <i class="icon-double-angle-right"></i> 站群劫持
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="">
+                                <i class="icon-double-angle-right"></i> 404劫持
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="b-has-child">
+                    <a href="#" class="dropdown-toggle b-nav-parent">
+                        <i class="fa fa-server icon-test"></i>
+                        <span class="menu-text">服务端管理</span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Server&amp;a=api">
+                                <i class="icon-double-angle-right"></i>接口管理
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Server&amp;a=index">
+                                <i class="icon-double-angle-right"></i>服务端获取
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Server&amp;a=keywords_group">
+                                <i class="icon-double-angle-right"></i> 关键词组管理
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Server&amp;a=import_keywords">
+                                <i class="icon-double-angle-right"></i> 关键词导入
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Server&amp;a=description">
+                                <i class="icon-double-angle-right"></i> 描述库管理
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Server&amp;a=templates">
+                                <i class="icon-double-angle-right"></i>模板库管理
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Server&amp;a=article">
+                                <i class="icon-double-angle-right"></i>文章库管理
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="b-has-child">
+                    <a href="#" class="dropdown-toggle b-nav-parent">
+                        <i class="fa fa-television icon-test"></i>
+                        <span class="menu-text">客户端管理</span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Cilent&amp;a=index">
+                                <i class="icon-double-angle-right"></i> 首页劫持生成
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="b-has-child">
+                    <a href="#" class="dropdown-toggle b-nav-parent">
+                        <i class="fa fa-cog icon-test"></i>
+                        <span class="menu-text">辅助工具 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Tools&amp;a=robot">
+                                <i class="icon-double-angle-right"></i>在线蜘蛛模拟
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Tools&amp;a=chenk">
+                                <i class="icon-double-angle-right"></i> Referer模拟
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Tools&amp;a=htaccess">
+                                <i class="icon-double-angle-right"></i> .htaccess全站劫持生成
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Tools&amp;a=group">
+                                <i class="icon-double-angle-right"></i> IIS 6 站群劫持生成</a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Tools&amp;a=imports">
+                                <i class="icon-double-angle-right"></i> IIS 域名导出
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Tools&amp;a=includes">
+                                <i class="icon-double-angle-right"></i> 文件索引加密
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="/index.php?m=Platform&amp;c=Tools&amp;a=decode">
+                                <i class="icon-double-angle-right"></i> JS 加密 or 解密
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="b-has-child"  id='show_domain_list'>
+                    <a href="#" class="dropdown-toggle b-nav-parent">
+                        <i class="fa fa-list-alt icon-test"></i>
+                        <span class="menu-text">目录反代管理</span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="b-nav-li">
+                            <a href="{{ url_for('show_domain_list', page='1')}}">
+                                <i class="icon-double-angle-right"></i>站点管理
+                            </a>
+                        </li>
+                        <li class="b-nav-li ">
+                            <a href="{{ url_for('show_pool_link') }}">
+                                <i class="icon-double-angle-right"></i>链接池管理
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <script type="text/javascript">try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}</script>
+        </div>
+        <div class="main-content">
+            <div class="page-content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>    
+    </div>
+</div>
+{% endblock %}
+
+{% block load_js %}
+{{ super() }}
+<script>
+    $(function(){
+        $('#{% block name%}{%endblock%}').find('.b-nav-parent').click();
+    })
+</script>
+{% endblock %}

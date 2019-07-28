@@ -1,0 +1,451 @@
+{% extends "nav.html" %}
+{% block title %}站点管理{% endblock %}
+{% block content %}
+    <div class="page-header">
+        <h1> 站点管理 &gt; 轮连and自动推送管理</h1>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab">
+                <li class="active"><a href="#home" data-toggle="tab">站点列表</a></li>
+                <li><a href="javascript:;" onclick="add()">添加站点</a></li>
+            </ul>
+            <div class="tabbable">
+                <div class="tab-content">
+                    <table class="table table-bordered table-hover">
+                        <tr>
+                            <th>站点名称</th>
+                            <th>站点URL</th>
+                            <th>站长token</th>
+                            <th>备注</th>
+                            <th>JS地址</th>
+                            <th>模板名</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                        {% for i in data %}
+                            <tr>
+                                <td>{{ i.title }}</td>
+                                <td><a href="javascript:;" name="domain">{{ i._id }}</a></td>
+                                <td><code>{{ i.baidu_token }}</code></td>
+                                <td>{{ i.rankname }}</td>
+                                <td>{{ i.js_jump }}</td>
+                                <td>{{ i.tpl_name }}</td>
+                                <td><b class="red">{{ i.add_time }}</b></td>
+                                <td>
+                                    <a class="btn-xs btn-primary" data-site-sid="{{ i._id }}" name="ViewSite"
+                                       href="javascript:void(0);">View</a>&nbsp;
+                                    <a class="btn-xs btn-danger" name="DeleteSite" data-site-sid="{{ i._id }}"
+                                       href="javascript:void(0);">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <!-- 分页开始 -->
+                    <nav style="text-align: center">
+                        <ul class="pagination">
+                            <li><a class="start" href="{{ url_for('show_domain_list', page='1') }}">首页</a></li>
+                            {% for p in page %}
+                                {% if current_page == p %}
+                                    <li class="active"><a class="num"
+                                                          href="{{ url_for('show_domain_list', page=current_page) }}">{{ p }}</a>
+                                    </li>
+                                {% else %}
+                                    <li><a class="num" href="{{ url_for('show_domain_list', page=p) }}">{{ p }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            <li><a class="end" href="{{ url_for('show_domain_list', page=max_page) }}">尾页</a></li>
+                        </ul>
+                    </nav>
+                    <!-- 分页结束 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 编辑站点 -->
+        <div class="modal fade" id="View-Sites" tabindex="-1" role="dialog" aria-labelledby="ViewSites"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times;</button>
+                        <h4 class="modal-title" id="ViewSites"> 查看站点</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-bordered table-hover table-condensed">
+                            <tr>
+                                <th width="15%">提示：</th>
+                                <td><span class="label label-warning"
+                                          style="width: 100%;">编辑后约60秒才能更新到控制端，请耐心等待！！</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="15%">网站名称：</th>
+                                <td><input class="input-medium" type="text" name="view_titles" style="width: 100%;"
+                                           placeholder="填写网址名字" readonly></td>
+                            </tr>
+                            <tr>
+                                <th width="15%">网站地址：</th>
+                                <td><input class="input-medium" type="text" name="view_url" style="width: 100%;"
+                                           readonly></td>
+                            </tr>
+                            <tr>
+                                <th width="15%">JS地址：</th>
+                                <td><input class="input-medium" type="text" name="view_js_jump" style="width: 100%;"
+                                           placeholder="排名出了之后跳哪里？"></td>
+                            </tr>
+                            <tr>
+                                <th width="15%">模板名：</th>
+                                <td><input class="input-medium" type="text" name="view_tpl_name" style="width: 100%;"
+                                           value="default.html" placeholder="需先上传模板后才填写哦~"></td>
+                            </tr>
+                            <tr>
+                                <th width="15%">目录前缀：</th>
+                                <td><input class="input-medium" type="text" name="view_dir_prefix" style="width: 100%;"
+                                           value="app,hot,doc,uki,jht" placeholder="生成的目录前缀"></td>
+                            </tr>
+                            <tr>
+                                <th width="15%">蜘蛛许可：</th>
+                                <td>
+                                <textarea name="view_spider_rules" id="spider_source"
+                                          class="form-control resizable processed" rows="5" style="width: 100%;"
+                                          title="编辑链接规则" placeholder="允许访问的蜘蛛列表">
+Sogou
+BaiduSpider
+360Spider
+YiSouSpider
+</textarea>
+                                </td>
+                            <tr>
+                                <th width="15%">Web容器：</th>
+                                <td>
+                                    <div class="form-inline" id="edit">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="webServerOptions" id="edit_0" value="0"> Nginx
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="webServerOptions" id="edit_1" value="1"> IIS
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="webServerOptions" id="edit_2" value="2"> Apache
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="15%">404错误页：</th>
+                                <td><input class="input-medium" type="text" name="view_error_page" style="width: 100%;"
+                                           placeholder="地区屏蔽404跳转地址"></td>
+                            </tr>
+                            <tr>
+                                <th width="15%">地区屏蔽：</th>
+                                <td><input class="input-medium" type="text" name="view_no_access" style="width: 100%;"
+                                           value="null"
+                                           placeholder="程序默认屏蔽菲律宾/柬埔寨/香港,仅支持省级地区 如：四川、北京、天津等……"></td>
+                            </tr>
+
+                            <tr>
+                                <th width="15%">备注：</th>
+                                <td><input class="input-medium" type="text" name="view_remakes" style="width: 100%;"
+                                           placeholder="你对它做了什么？"></td>
+                            </tr>
+                            <tr>
+                                <th width="15%">百度Keys：</th>
+                                <td>
+                                    <input class="input-medium" type="text" name="view_baidu_token" style="width: 100%;"
+                                           placeholder="百度token，需认证百度站长获取">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td><input class="btn btn-success" id="edit_sites" type="button" value="保存"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加站点 -->
+        <div class="modal fade" id="Add-Sites" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times;</button>
+                        <h4 class="modal-title" id="myModalLabel"> 添加站点</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="bjy-form" class="form-inline" action="/index.php?m=Platform&c=Proxy&a=site&action=add"
+                              method="post">
+                            <table class="table table-striped table-bordered table-hover table-condensed">
+                                <tr>
+                                    <th width="15%">网站名称：</th>
+                                    <td><input class="input-medium" type="text" name="title" style="width: 100%;"
+                                               placeholder="填写网址名字"></td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">网站地址：</th>
+                                    <td><input class="input-medium" type="text" name="url" style="width: 100%;"
+                                               placeholder="填写网站地址, 如: http://www.baidu.com"></td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">备注：</th>
+                                    <td><input class="input-medium" type="text" name="rankname" style="width: 100%;"
+                                               placeholder="起个牛逼的名字吧~"></td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">JS地址：</th>
+                                    <td><input class="input-medium" type="text" name="js_jump" style="width: 100%;"
+                                               placeholder="排名出了之后跳哪里？"></td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">模板名：</th>
+                                    <td><input class="input-medium" type="text" name="tpl_name" style="width: 100%;"
+                                               value="default.html" placeholder="需先上传模板后才填写哦~"></td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">目录前缀：</th>
+                                    <td><input class="input-medium" type="text" name="dir_prefix" style="width: 100%;"
+                                               value="app,hot,doc,uki,jht" placeholder="生成的目录前缀"></td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">Web容器：</th>
+
+                                    <td>
+                                        <div class="form-inline" id="add">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="webServerOptions" id="inlineRadio1" value="0"
+                                                       checked> Nginx
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="webServerOptions" id="inlineRadio2" value="1">
+                                                IIS
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="webServerOptions" id="inlineRadio3" value="2">
+                                                Apache
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">蜘蛛许可：</th>
+                                    <td>
+                                    <textarea name="spider_rules" id="spider_source"
+                                              class="form-control resizable processed" rows="5" style="width: 100%;"
+                                              title="编辑链接规则" placeholder="允许访问的蜘蛛列表
+Sogou
+BaiduSpider
+360Spider
+YiSouSpider	">
+Sogou
+BaiduSpider
+360Spider
+YiSouSpider</textarea>
+                                    </td>
+                                <tr>
+                                    <th width="15%">404错误页：</th>
+                                    <td><input class="input-medium" type="text" name="error_page" style="width: 100%;"
+                                               placeholder="地区屏蔽404跳转地址"></td>
+                                </tr>
+                                <tr>
+                                    <th width="15%">地区屏蔽：</th>
+                                    <td><input class="input-medium" type="text" name="no_access" style="width: 100%;"
+                                               placeholder="程序默认屏蔽菲律宾/柬埔寨/香港,仅支持省级地区 如：四川、北京、天津等……" value="null"></td>
+                                </tr>
+                                <input type="hidden" name="sid_hide"/>
+                                <tr>
+                                    <th></th>
+                                    <td><input class="btn btn-success" type="submit" value="添加"></td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="icon-double-angle-up icon-only bigger-110"></i>
+        </a>
+    </div>
+
+{% endblock %}
+
+{% block name %}show_domain_list{% endblock %}
+
+{% block load_js %}
+    {{ super() }}
+    <script>
+        // 编辑网站
+        $("a[name='ViewSite']").click(function () {
+            // 获取当前点击的列表ID
+            site_sid = $(this).attr('data-site-sid');
+            view_title = $("input[name='view_titles']");
+            view_url = $("input[name='view_url']");
+            view_js_jump = $("input[name='view_js_jump']");
+            view_tpl_name = $("input[name='view_tpl_name']");
+            view_reserver = $("input[name='view_reserver']");
+            view_dir_prefix = $("input[name='view_dir_prefix']");
+            view_error_page = $("input[name='view_error_page']");
+            view_no_access = $("input[name='view_no_access']");
+            view_remakes = $("input[name='view_remakes']");
+            view_baidu_token = $("input[name='view_baidu_token']");
+            view_spider_rules = $("textarea[name='view_spider_rules']");
+            sid_hide = $("input[name='sid_hide']").val(site_sid);
+
+            $.post("{{ url_for('find_domain') }}", {sid: site_sid}, function (data, textStatus, xhr) {
+                // 请求成功
+                if (data.status === true) {
+                    view_js_jump.val(data.data.js_jump);
+                    view_url.val(data.data._id);
+                    view_title.val(data.data.title);
+                    view_tpl_name.val(data.data.tpl_name);
+                    view_dir_prefix.val(data.data.dir_prefix);
+                    view_remakes.val(data.data.rankname);
+                    view_error_page.val(data.data.error_page);
+                    view_no_access.val(data.data.no_access);
+                    view_spider_rules.val(data.data.spider_rules.join("\r\n"));
+                    // view_reserver.val("http://www.reproxy.top/caipiao/" + data.data.siteid);
+                    view_web_server_types = data.data.webserver_classe;
+                    // view_baidu_token.val(data.data.baidu_token);
+                    view_baidu_token.val('null');
+                    // Nginx
+                    if (view_web_server_types == "0") {
+                        //edit
+                        $("#edit_0").attr("checked", true);
+                    }
+
+                    if (view_web_server_types == "1") {
+                        $("#edit_1").attr("checked", true);
+                    }
+
+                    if (view_web_server_types == "2") {
+                        $("#edit_2").attr("checked", true);
+                    }
+
+                    // 选项
+                    $("#View-Sites").modal('show');
+
+                    // 后端没有数据
+                }
+            });
+        });
+
+        // 编辑事件
+        $("#edit_sites").click(function () {
+            if (confirm("是否修改网站配置?")) {
+                chencke_types = "";
+                if ($("#edit_0").prop("checked")) {
+                    chencke_types = 0;
+                }
+                if ($("#edit_1").prop("checked")) {
+                    chencke_types = 1;
+                }
+                if ($("#edit_2").prop("checked")) {
+                    chencke_types = 2;
+                }
+                update_data = {
+                    sid: $("input[name='sid_hide']").val(),
+                    js_jump: view_js_jump.val(),
+                    rankname: view_remakes.val(),
+                    dir_prefix: view_dir_prefix.val(),
+                    tpl_name: view_tpl_name.val(),
+                    no_access: view_no_access.val(),
+                    error_page: view_error_page.val(),
+                    webserver_classe: chencke_types,
+                    baidu_token: view_baidu_token.val(),
+                    spider_rules: view_spider_rules.val()
+                };
+                for (var i in update_data) {
+                    if (update_data[i] === "") {
+                        alert("请填写完整信息后在修改!");
+                        return false;
+                    }
+                }
+
+                $.post("{{ url_for('edit_domain') }}", update_data, function (data, textStatus, xhr) {
+                    console.log(data);
+                    if (data.status == true) {
+                        alert(data.info);
+                        window.location.reload();
+                    }
+
+                    if (data.status == false) {
+                        alert(data.info);
+                        return false;
+                    }
+                });
+            }
+        });
+
+        // 删除网站监听事件
+        $("a[name='DeleteSite']").click(function (event) {
+            xsid = $(this).attr('data-site-sid');
+            if (confirm("你是否真的要删除ID为【" + xsid + "】的网站配置文件\n如果删除将不能恢复，你确定继续吗？")) {
+                $.post("{{ url_for('del_domain') }}", {sid: xsid}, function (data, textStatus, xhr) {
+                    if (data.status == true) {
+                        alert(":( 删除成功，请等待控制端删除...!");
+                        window.location.reload();
+                    } else {
+                        alert(":) 删除失败，可能是人品问题~");
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+
+        // 添加网站
+        $("#bjy-form").submit(function (event) {
+            event.preventDefault();
+            postData = {
+                title: $("input[name='title']").val(),
+                url: $("input[name='url']").val(),
+                rankname: $("input[name='rankname']").val(),
+                js_jump: $("input[name='js_jump']").val(),
+                tpl_name: $("input[name='tpl_name']").val(),
+                dir_prefix: $("input[name='dir_prefix']").val(),
+                no_access: $("input[name='no_access']").val(),
+                error_page: $("input[name='error_page']").val(),
+                webserver_classe: $("#add > label >input[type='radio']:checked").val(),
+                spider_rules: $("textarea[name='view_spider_rules']").val()
+            };
+            console.log(postData);
+            for (var i in postData) {
+                if (postData[i] == "") {
+                    alert("请填写完整信息后在提交!");
+                    return false;
+                }
+
+            }
+
+            $.post("{{ url_for('add_domain') }}", postData, function (data, textStatus, xhr) {
+                if (data.status == false) {
+                    alert(data.info);
+                    return false;
+                }
+
+                if (data.status == true) {
+                    alert(data.info);
+                    window.location.reload();
+                }
+            });
+        });
+
+        // 添加菜单
+        function add() {
+            $('#Add-Sites').modal('show');
+        }
+
+        // 修改菜单
+        function edit(obj) {
+            var ruleId = $(obj).attr('ruleId');
+            var ruletitle = $(obj).attr('ruletitle');
+            $("input[name='id']").val(ruleId);
+            $("input[name='title']").val(ruletitle);
+            $('#bjy-edit').modal('show');
+        }
+    </script>
+{% endblock %}

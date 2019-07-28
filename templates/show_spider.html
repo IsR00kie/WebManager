@@ -1,0 +1,124 @@
+{% extends "nav.html" %}
+{% block title %}蜘蛛爬行统计{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1> 首页&gt; 
+        {% if request.args.getlist('show')[0] == 'today' %}
+        今天
+        {% else %}
+        昨天
+        {% endif %}
+
+        {% if request.args.getlist('spider')[0] == 'all_spider' %}
+        全部
+        {% elif request.args.getlist('spider')[0] == 'baidu_spider' %}
+        百度
+        {% elif request.args.getlist('spider')[0] == 'sogou_spider' %}
+        搜狗
+        {% elif request.args.getlist('spider')[0] == 'haosou_spider' %}
+        360
+        {% elif request.args.getlist('spider')[0] == 'bing_spider' %}
+        必应
+        {% elif request.args.getlist('spider')[0] == 'google_spider' %}
+        谷歌
+        {% elif request.args.getlist('spider')[0] == 'sm_spider' %}
+        神马
+        {% endif %}
+        蜘蛛爬行统计</h1>
+</div>
+<div class="col-xs-12">
+    <ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
+        {% if request.args.getlist('spider')[0] == 'all_spider' %}<li id="all_list" class="active">{% else %}<li id="all_list">{% endif %}
+
+        {% if request.args.getlist('show')[0] == 'today' %}
+            <a href="{{ url_for('show_spider', show='today', spider='all_spider') }}">全部蜘蛛</a>
+        {% else %}
+            <a href="{{ url_for('show_spider', show='yesterday', spider='all_spider') }}">全部蜘蛛</a>
+        {% endif %}
+        </li>
+
+        {% if request.args.getlist('spider')[0] == 'baidu_spider' %}<li id="baiduspider" class="active">{% else %}<li id="baiduspider">{% endif %}
+        {% if request.args.getlist('show')[0] == 'today' %}
+            <a href="{{ url_for('show_spider', show='today', spider='baidu_spider') }}">百度蜘蛛</a>
+        {% else %}
+            <a href="{{ url_for('show_spider', show='yesterday', spider='baidu_spider') }}">百度蜘蛛</a>
+        {% endif %}
+        </li>
+
+        {% if request.args.getlist('spider')[0] == 'sogou_spider' %}<li id="sogouspider" class="active">{% else %}<li id="sogouspider">{% endif %}
+        {% if request.args.getlist('show')[0] == 'today' %}
+            <a href="{{ url_for('show_spider', show='today', spider='sogou_spider') }}">搜狗蜘蛛</a>
+        {% else %}
+            <a href="{{ url_for('show_spider', show='yesterday', spider='sogou_spider') }}">搜狗蜘蛛</a>
+        {% endif %}
+        </li>
+
+        {% if request.args.getlist('spider')[0] == 'haosou_spider' %}<li id="sogouspider" class="active">{% else %}<li id="sogouspider">{% endif %}
+        {% if request.args.getlist('show')[0] == 'today' %}
+            <a href="{{ url_for('show_spider', show='today', spider='haosou_spider') }}">360蜘蛛</a>
+        {% else %}
+            <a href="{{ url_for('show_spider', show='yesterday', spider='haosou_spider') }}">360蜘蛛</a>
+        {% endif %}
+        </li>
+
+        {% if request.args.getlist('spider')[0] == 'bing_spider' %}<li id="bingspider" class="active">{% else %}<li id="bingspider">{% endif %}
+        {% if request.args.getlist('show')[0] == 'today' %}
+            <a href="{{ url_for('show_spider', show='today', spider='bing_spider') }}">必应蜘蛛</a>
+        {% else %}
+            <a href="{{ url_for('show_spider', show='yesterday', spider='bing_spider') }}">必应蜘蛛</a>
+        {% endif %}
+        </li>
+        
+        {% if request.args.getlist('spider')[0] == 'google_spider' %}<li id="googlespider" class="active">{% else %}<li id="googlespider">{% endif %}
+        {% if request.args.getlist('show')[0] == 'today' %}
+            <a href="{{ url_for('show_spider', show='today', spider='google_spider') }}">谷歌蜘蛛</a>
+        {% else %}
+            <a href="{{ url_for('show_spider', show='yesterday', spider='google_spider') }}">谷歌蜘蛛</a>
+        {% endif %}
+        </li>
+
+        {% if request.args.getlist('spider')[0] == 'sm_spider' %}<li id="smspider" class="active">{% else %}<li id="smspider">{% endif %}
+        {% if request.args.getlist('show')[0] == 'today' %}
+            <a href="{{ url_for('show_spider', show='today', spider='sm_spider') }}">神马蜘蛛</a>
+        {% else %}
+            <a href="{{ url_for('show_spider', show='yesterday', spider='sm_spider') }}">神马蜘蛛</a>
+        {% endif %}
+        </li>
+
+    </ul>
+    <div class="tabbable">
+        <div class="tab-content">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>爬行ID</th>
+                    <th>爬行域名</th>
+                    <th>爬行 User-Agent</th>
+                    <th>爬行URI</th>
+                    <th>缓存名</th>
+                    <th>关键词类型</th>
+                    <th>爬行类型</th>
+                    <th>爬行时间</th>
+                </tr>
+                <tr>
+                    <td>33760984</td>
+                    <td><a href="javascript:;" name="domain">www.360kad.com</a></td>
+                    <td><b class="blue">SogouSpider</b></td>
+                    <td><a href="javascript:;" title="点击访问" name="urls">http://www.360kad.com//aoobqopzc/aoobqopzc</a></td>
+                    <td>44be8a405832d25648877f8ba938477b</td>
+                    <td>qipai</td>
+                    <td>proxy</td>
+                    <td><b class="red">刚刚</b></td>
+                </tr>
+            </table>
+            <nav style="text-align: center">
+                <ul class="pagination"> 
+                    <li class="active"><a href="#">1</a></li>
+                    <li><a class="end" href="#">...17125</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block name%}spider{%endblock%}

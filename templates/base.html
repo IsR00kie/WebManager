@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block base_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ace.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-multiselect.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% endblock %}
+    {% block load_css %}
+    {% endblock %}
+    <title>{% block title %} {% endblock %}-SEO管理系统</title>
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <ul class="flash">
+        {% for message in messages %}
+            <div class="alert alert-success" style="text-align: center">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <strong>{{ message }}</strong></div>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endwith %}
+    
+{% block body %}
+{% endblock %}
+
+{% block base_js %}
+<script src="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/typeahead-bs2.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui-1.10.3.custom.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.ui.touch-punch.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.slimscroll.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.easy-pie-chart.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.sparkline.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.flot.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.flot.pie.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.flot.resize.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ace-elements.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ace.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+{% endblock %}
+
+{% block load_js %}
+{% endblock %}
+</body>
+</html>
