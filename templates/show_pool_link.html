@@ -51,17 +51,17 @@
                 </table>
                 <nav style="text-align: center">
                     <ul class="pagination">
-                        <li><a class="start" href="{{ url_for('show_domain_list', page='1') }}">首页</a></li>
+                        <li><a class="start" href="{{ url_for('link.show_pool_link', page='1') }}">首页</a></li>
                         {% for p in page %}
                             {% if current_page == p %}
                                 <li class="active"><a class="num"
-                                                      href="{{ url_for('show_domain_list', page=current_page) }}">{{ p }}</a>
+                                                      href="{{ url_for('link.show_pool_link', page=current_page) }}">{{ p }}</a>
                                 </li>
                             {% else %}
-                                <li><a class="num" href="{{ url_for('show_domain_list', page=p) }}">{{ p }}</a></li>
+                                <li><a class="num" href="{{ url_for('link.show_pool_link', page=p) }}">{{ p }}</a></li>
                             {% endif %}
                         {% endfor %}
-                        <li><a class="end" href="{{ url_for('show_domain_list', page=max_page) }}">尾页</a></li>
+                        <li><a class="end" href="{{ url_for('link.show_pool_link', page=max_page) }}">尾页</a></li>
                     </ul>
                 </nav>
             </div>
@@ -79,7 +79,7 @@
                     <h4 class="modal-title" id="myModalLabel"> 添加链接</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="bjy-form" class="form-inline" action="{{ url_for('add_pool_link') }}" method="post">
+                    <form id="bjy-form" class="form-inline" action="{{ url_for('link.add_pool_link') }}" method="post">
                         <table class="table table-striped table-bordered table-hover table-condensed">
                             <tr>
                                 <th width="15%">链接地址:</th>
@@ -210,7 +210,7 @@
             view_slink_level = $("select[name='edit_slink_level']");
             view_slink_rules = $("textarea[name='edit_slink_rules']");
 
-            $.post("{{ url_for('find_pool_link') }}", {sid: site_sid}, function (data, textStatus, xhr) {
+            $.post("{{ url_for('link.find_pool_link') }}", {sid: site_sid}, function (data, textStatus, xhr) {
                 // 请求成功
                 if (data.status === true) {
                     view_url.val(data.data._id);
@@ -239,7 +239,7 @@
                     }
                 }
 
-                $.post("{{ url_for('edit_pool_link') }}", update_data, function (data, textStatus, xhr) {
+                $.post("{{ url_for('link.edit_pool_link') }}", update_data, function (data, textStatus, xhr) {
                     if (data.status == true) {
                         alert(data.info);
                         window.location.reload();
@@ -263,7 +263,7 @@
         $("a[name='DeleteSite']").click(function (event) {
             xsid = $(this).attr('data-site-sid');
             if (confirm("你是否真的要删除ID为【" + xsid + "】的网站轮链配置文件\n如果删除将不能恢复，你确定继续吗？")) {
-                $.post("{{ url_for('del_pool_link') }}", {sid: xsid}, function (data, textStatus, xhr) {
+                $.post("{{ url_for('link.del_pool_link') }}", {sid: xsid}, function (data, textStatus, xhr) {
                     if (data.status == true) {
                         alert(":( 删除成功，请等待控制端删除...!");
                         window.location.reload();

@@ -15,7 +15,7 @@
         百度
         {% elif request.args.getlist('spider')[0] == 'sogou_spider' %}
         搜狗
-        {% elif request.args.getlist('spider')[0] == 'haosou_spider' %}
+        {% elif request.args.getlist('spider')[0] == '360_spider' %}
         360
         {% elif request.args.getlist('spider')[0] == 'bing_spider' %}
         必应
@@ -53,11 +53,11 @@
         {% endif %}
         </li>
 
-        {% if request.args.getlist('spider')[0] == 'haosou_spider' %}<li id="sogouspider" class="active">{% else %}<li id="sogouspider">{% endif %}
+        {% if request.args.getlist('spider')[0] == '360_spider' %}<li id="sogouspider" class="active">{% else %}<li id="sogouspider">{% endif %}
         {% if request.args.getlist('show')[0] == 'today' %}
-            <a href="{{ url_for('show_spider', show='today', spider='haosou_spider') }}">360蜘蛛</a>
+            <a href="{{ url_for('show_spider', show='today', spider='360_spider') }}">360蜘蛛</a>
         {% else %}
-            <a href="{{ url_for('show_spider', show='yesterday', spider='haosou_spider') }}">360蜘蛛</a>
+            <a href="{{ url_for('show_spider', show='yesterday', spider='360_spider') }}">360蜘蛛</a>
         {% endif %}
         </li>
 
@@ -91,29 +91,35 @@
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>爬行ID</th>
-                    <th>爬行域名</th>
-                    <th>爬行 User-Agent</th>
                     <th>爬行URI</th>
-                    <th>缓存名</th>
-                    <th>关键词类型</th>
-                    <th>爬行类型</th>
+                    <th>蜘蛛名</th>
+                    <th>爬行 User-Agent</th>
                     <th>爬行时间</th>
                 </tr>
+                {% for d in data %}
                 <tr>
-                    <td>33760984</td>
-                    <td><a href="javascript:;" name="domain">www.360kad.com</a></td>
-                    <td><b class="blue">SogouSpider</b></td>
-                    <td><a href="javascript:;" title="点击访问" name="urls">http://www.360kad.com//aoobqopzc/aoobqopzc</a></td>
-                    <td>44be8a405832d25648877f8ba938477b</td>
-                    <td>qipai</td>
-                    <td>proxy</td>
-                    <td><b class="red">刚刚</b></td>
+                    <td>{{ d._id }}</td>
+                    <td><a href="javascript:;" name="domain">{{ d.url }}</a></td>
+                    <td><b class="red">{{ d.name }}</b></td>
+                    <td><b class="blue">{{ d.user_agent }}</b></td>
+                    <td><b class="red">{{ d.create_time }}</b></td>
                 </tr>
+                {% endfor %}
+                
             </table>
             <nav style="text-align: center">
-                <ul class="pagination"> 
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a class="end" href="#">...17125</a></li>
+                <ul class="pagination">
+                    <li><a class="start" href="{{ url_for('show_spider', page='1', spider=request.args.get('spider', '')) }}">首页</a></li>
+                    {% for p in page %}
+                        {% if current_page == p %}
+                            <li class="active">
+                                <a class="num" href="{{ url_for('show_spider', page=current_page, spider=request.args.get('spider', '')) }}">{{ p }}</a>
+                            </li>
+                        {% else %}
+                            <li><a class="num" href="{{ url_for('show_spider', page=p, spider=request.args.get('spider', '')) }}">{{ p }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li><a class="end" href="{{ url_for('show_spider', page=max_page, spider=request.args.get('spider', '')) }}">尾页</a></li>
                 </ul>
             </nav>
         </div>

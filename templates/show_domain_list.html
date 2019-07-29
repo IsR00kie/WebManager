@@ -45,17 +45,17 @@
                     <!-- 分页开始 -->
                     <nav style="text-align: center">
                         <ul class="pagination">
-                            <li><a class="start" href="{{ url_for('show_domain_list', page='1') }}">首页</a></li>
+                            <li><a class="start" href="{{ url_for('domain.show_domain_list', page='1') }}">首页</a></li>
                             {% for p in page %}
                                 {% if current_page == p %}
                                     <li class="active"><a class="num"
-                                                          href="{{ url_for('show_domain_list', page=current_page) }}">{{ p }}</a>
+                                                          href="{{ url_for('domain.show_domain_list', page=current_page) }}">{{ p }}</a>
                                     </li>
                                 {% else %}
-                                    <li><a class="num" href="{{ url_for('show_domain_list', page=p) }}">{{ p }}</a></li>
+                                    <li><a class="num" href="{{ url_for('domain.show_domain_list', page=p) }}">{{ p }}</a></li>
                                 {% endif %}
                             {% endfor %}
-                            <li><a class="end" href="{{ url_for('show_domain_list', page=max_page) }}">尾页</a></li>
+                            <li><a class="end" href="{{ url_for('domain.show_domain_list', page=max_page) }}">尾页</a></li>
                         </ul>
                     </nav>
                     <!-- 分页结束 -->
@@ -112,9 +112,10 @@
                                           class="form-control resizable processed" rows="5" style="width: 100%;"
                                           title="编辑链接规则" placeholder="允许访问的蜘蛛列表">
 Sogou
-BaiduSpider
-360Spider
-YiSouSpider
+Baidu
+360
+YiSou
+Sm
 </textarea>
                                 </td>
                             <tr>
@@ -237,13 +238,15 @@ YiSouSpider
                                               class="form-control resizable processed" rows="5" style="width: 100%;"
                                               title="编辑链接规则" placeholder="允许访问的蜘蛛列表
 Sogou
-BaiduSpider
-360Spider
-YiSouSpider	">
+Baidu
+360
+YiSou
+Sm">
 Sogou
-BaiduSpider
-360Spider
-YiSouSpider</textarea>
+Baidu
+360
+YiSou
+Sm</textarea>
                                     </td>
                                 <tr>
                                     <th width="15%">404错误页：</th>
@@ -296,7 +299,7 @@ YiSouSpider</textarea>
             view_spider_rules = $("textarea[name='view_spider_rules']");
             sid_hide = $("input[name='sid_hide']").val(site_sid);
 
-            $.post("{{ url_for('find_domain') }}", {sid: site_sid}, function (data, textStatus, xhr) {
+            $.post("{{ url_for('domain.find_domain') }}", {sid: site_sid}, function (data, textStatus, xhr) {
                 // 请求成功
                 if (data.status === true) {
                     view_js_jump.val(data.data.js_jump);
@@ -366,7 +369,7 @@ YiSouSpider</textarea>
                     }
                 }
 
-                $.post("{{ url_for('edit_domain') }}", update_data, function (data, textStatus, xhr) {
+                $.post("{{ url_for('domain.edit_domain') }}", update_data, function (data, textStatus, xhr) {
                     console.log(data);
                     if (data.status == true) {
                         alert(data.info);
@@ -385,7 +388,7 @@ YiSouSpider</textarea>
         $("a[name='DeleteSite']").click(function (event) {
             xsid = $(this).attr('data-site-sid');
             if (confirm("你是否真的要删除ID为【" + xsid + "】的网站配置文件\n如果删除将不能恢复，你确定继续吗？")) {
-                $.post("{{ url_for('del_domain') }}", {sid: xsid}, function (data, textStatus, xhr) {
+                $.post("{{ url_for('domain.del_domain') }}", {sid: xsid}, function (data, textStatus, xhr) {
                     if (data.status == true) {
                         alert(":( 删除成功，请等待控制端删除...!");
                         window.location.reload();
@@ -421,7 +424,7 @@ YiSouSpider</textarea>
 
             }
 
-            $.post("{{ url_for('add_domain') }}", postData, function (data, textStatus, xhr) {
+            $.post("{{ url_for('domain.add_domain') }}", postData, function (data, textStatus, xhr) {
                 if (data.status == false) {
                     alert(data.info);
                     return false;
