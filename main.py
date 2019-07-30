@@ -6,7 +6,7 @@
 @Github: https://github.com/hyll8882019
 @Date: 2019-07-28 20:37:12
 @LastEditors: bayonet
-@LastEditTime: 2019-07-30 20:37:56
+@LastEditTime: 2019-07-30 21:25:54
 '''
 from datetime import datetime, timedelta
 
@@ -271,6 +271,28 @@ def show():
 
     return template
 
+
+@app.route('/show_link', methods=['GET', ])
+def show_link():
+    '''显示轮链'''
+    template = '<div style="display:none;">\n{}\n</div>'
+    links = []
+    conn = get_connect()
+    pool_link = conn.domain_manager.pool_link
+    tmp = []
+    for link in pool_link.find():
+        links.append({'domain': link['_id'], 'rules': link['rules']})
+    for _ in range(int(request.args.get('i', 500))):
+        if len(links) == 0:
+            tmp.append('<a href="%s"></a>' % random_chars(5))
+        else:
+            link = random.choice(links)
+            link = link['domain'] + random.choice(link['rules'])
+            link = link.replace('<随机字符>', random_chars(5))
+            link = link.replace('<随机数字>', random_chars(5))
+            tmp.append('<a href="%s"></a>' % link)
+
+    return template.format('\n'.join(tmp))
 
 # 模板渲染结束
 if __name__ == "__main__":
